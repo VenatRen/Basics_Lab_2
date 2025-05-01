@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  db:
+    command: ['postgres', '-c', 'log_statement=all']
+    container_name: lab_6_db
+    environment:
+      - POSTGRES_DB=lab_6_db
+      - POSTGRES_USER=student
+      - POSTGRES_PASSWORD=QrGZex
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    image: postgres:14
+    ports:
+      - '5432:5432'
+    restart: always
+    volumes:
+      - lab_6_db_volume:/var/lib/postgresql/data
+
+  pg_admin_lab_6:
+    container_name: pg_admin_lab_6
+    image: dpage/pgadmin4:8.9
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com
+      - PGADMIN_DEFAULT_PASSWORD=qazwsxedc
+    ports:
+      - '7777:80'
+    volumes:
+      - pgadmin_volume:/var/lib/pgadmin
+    restart: always
+
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis-lab_6-container
+    command: redis-server --requirepass qazwsxedc
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_lab_6_data:/var/lib/redis
+
+volumes:
+  pgadmin_volume:
+  lab_6_db_volume:
+  redis_lab_6_data:
